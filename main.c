@@ -2,7 +2,7 @@ int AllCycles = 0;
 int maxX = 640;
 int maxY = 350;
 int Y = 0;
-int X_ADDR[12];
+int X_ADDR[12]; //replace with 15 later
 int X_BUFFER_BIN[8];
 int X_BUFFER[640];
 void setup(){
@@ -37,8 +37,7 @@ void loop(){
   int count=0;
   //horizontal
   for(int x_ = 0;x_<=maxX;x_++){
-    //display x
-    
+    //display x by setting a pin to 1 if X_BUFFER[x_] is 1
     AllCycles++;
   }for(int FP = 0;FP<=16;FP++){
     //display nothing
@@ -48,9 +47,9 @@ void loop(){
     //display nothing
     if (count == 0){
       int count2 = 0;
-      for(int i = 1; i<=640; i++){ //this loop will most likely not work becuse it loops 640 times and i only have 48 
+      for(int i = 1; i<=640; i=count2+1){ //this loop will most likely not work becuse it loops 640 times and i only have 48 
         //set X buffer addr
-        int_to_bin_array(AllCycles + i, 12, X_ADDR);
+        int_to_bin_array(AllCycles + i, 12, X_ADDR);//replace with 15 later
         digitalWrite(2, HIGH);//high if X_ADDR[0-12] is 1
         digitalWrite(3, HIGH);
         digitalWrite(4, HIGH);
@@ -76,9 +75,15 @@ void loop(){
         X_BUFFER_BIN[6] = analogRead(A6);
         X_BUFFER_BIN[7] = analogRead(A7);
         //set x buffer binary to int then add to the x buffer
-        X_BUFFER[count2] = bin_array_to_int((char*)X_BUFFER_BIN);
-        
-        count2++;
+        X_BUFFER[count2] = X_BUFFER_BIN[0];
+        X_BUFFER[count2 + 1] = X_BUFFER_BIN[1];
+        X_BUFFER[count2 + 2] = X_BUFFER_BIN[2];
+        X_BUFFER[count2 + 3] = X_BUFFER_BIN[3];
+        X_BUFFER[count2 + 4] = X_BUFFER_BIN[4];
+        X_BUFFER[count2 + 5] = X_BUFFER_BIN[5];
+        X_BUFFER[count2 + 6] = X_BUFFER_BIN[6];
+        X_BUFFER[count2 + 7] = X_BUFFER_BIN[7];
+        count2+=8;
       }
     } else {
       //extra space
@@ -109,12 +114,4 @@ void int_to_bin_array(unsigned int in, int count, int* out){
         out[i] = (in & mask) ? 1 : 0;
         in <<= 1;
     }
-}int bin_array_to_int(char s[]) {
-    int n = 0;
-    int i;
-    for (i = 0; i < 8; ++i) {
-        n <<= 1;
-        n += s[i] - '0';
-    }
-    return n;
 }
