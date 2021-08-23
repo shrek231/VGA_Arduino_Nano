@@ -2,7 +2,7 @@ int AllCycles = 0;
 int maxX = 640;
 int maxY = 350;
 int Y = 0;
-int X_ADDR[12]; //replace with 15 later
+int X_ADDR[12]; //replace with 14 later
 int X_BUFFER_BIN[8];
 int X_BUFFER[640];
 void setup(){
@@ -33,7 +33,6 @@ void setup(){
   //address line 14
 }
 void loop(){
-  //Serial.println(A2_);
   int count=0;
   //horizontal
   for(int x_ = 0;x_<=maxX;x_++){
@@ -49,32 +48,33 @@ void loop(){
       int count2 = 0;
       for(int i = 1; i<=640; i=count2+1){ //this loop will most likely not work becuse it loops 640 times and i only have 48 
         //set X buffer addr
-        int_to_bin_array(AllCycles + i, 12, X_ADDR);//replace with 15 later
-        digitalWrite(2, HIGH);//high if X_ADDR[0-12] is 1
-        digitalWrite(3, HIGH);
-        digitalWrite(4, HIGH);
-        digitalWrite(5, HIGH);
-        digitalWrite(6, HIGH);
-        digitalWrite(7, HIGH);
-        digitalWrite(8, HIGH);
-        digitalWrite(9, HIGH);
-        digitalWrite(10, HIGH);
-        digitalWrite(11, HIGH);
-        digitalWrite(12, HIGH);
-        digitalWrite(13, HIGH);
-        //address line 12
-        //address line 13
-        //address line 14
+        int_to_bin_array(AllCycles + i, 11, X_ADDR);//replace with 14 later
+        for (int i = 2,x = 0; i <= 11; i++,x++){//replace with 14 later
+          if(X_ADDR[x] == 1){
+            digitalWrite(i, HIGH);//high if X_ADDR[0-12] is 1
+          } else {
+            digitalWrite(i, LOW);//high if X_ADDR[0-12] is 0
+          }
+        }
         //Set X Buffer
-        X_BUFFER_BIN[0] = analogRead(A0);
-        X_BUFFER_BIN[1] = analogRead(A1);
-        X_BUFFER_BIN[2] = analogRead(A2);
-        X_BUFFER_BIN[3] = analogRead(A3);
-        X_BUFFER_BIN[4] = analogRead(A4);
-        X_BUFFER_BIN[5] = analogRead(A5);
-        X_BUFFER_BIN[6] = analogRead(A6);
-        X_BUFFER_BIN[7] = analogRead(A7);
+        X_BUFFER_BIN[0] = digitalRead(A0);
+        X_BUFFER_BIN[1] = digitalRead(A1);
+        X_BUFFER_BIN[2] = digitalRead(A2);
+        X_BUFFER_BIN[3] = digitalRead(A3);
+        X_BUFFER_BIN[4] = digitalRead(A4);
+        X_BUFFER_BIN[5] = digitalRead(A5);
+        X_BUFFER_BIN[6] = digitalRead(A6);
+        X_BUFFER_BIN[7] = digitalRead(A7);
         //set x buffer binary to int then add to the x buffer
+        /*
+        Serial.print(X_BUFFER_BIN[0]);
+        Serial.print(X_BUFFER_BIN[1]);
+        Serial.print(X_BUFFER_BIN[2]);
+        Serial.print(X_BUFFER_BIN[3]);
+        Serial.print(X_BUFFER_BIN[4]);
+        Serial.print(X_BUFFER_BIN[5]);
+        Serial.print(X_BUFFER_BIN[6]);
+        Serial.println(X_BUFFER_BIN[7]);*/
         X_BUFFER[count2] = X_BUFFER_BIN[0];
         X_BUFFER[count2 + 1] = X_BUFFER_BIN[1];
         X_BUFFER[count2 + 2] = X_BUFFER_BIN[2];
